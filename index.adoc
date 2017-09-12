@@ -1,0 +1,16 @@
+:source-highlighter: pygments
+:imagesdir: imagens
+
+= Trabalhos de PDI
+Andrés Alvarado <andresaar94@gmail.com>
+
+== Exercicio 2.2
+
+=== regions.py
+
+[source,python]
+----
+include::programas/regions.py[]
+----
+
+image::nina.jpg[]
