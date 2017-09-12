@@ -505,12 +505,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="email" class="email"><a href="mailto:andresaar94@gmail.com">andresaar94@gmail.com</a></span><br>
 </div>
 <div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
+<div id="toctitle">Sumário</div>
 <ul class="sectlevel1">
 <li><a href="#_exercicio_2_2">Exercicio 2.2</a>
 <ul class="sectlevel2">
 <li><a href="#_regions_py">regions.py</a></li>
 <li><a href="#_trocaregioes_py">trocaregioes.py</a></li>
+</ul>
+</li>
+<li><a href="#_exercicios_3_2">Exercicios 3.2</a>
+<ul class="sectlevel2">
+<li><a href="#_labeling_py">labeling.py</a></li>
 </ul>
 </li>
 </ul>
@@ -629,7 +634,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="paragraph">
-<p>Ao criar uma área com o mouse, os pixels dentro dessa area serão substituidos com 255 menos o valor original, criando assim o negativo nesta região. Se após criado o negativo for apertada a tecla <strong>z</strong>, o programa é fechado. Caso contrario, será carregada novamente a imagem e o programa esperara mais uma região para negativo.</p>
+<p>Ao criar uma área com o mouse, os pixels dentro dessa area serão substituidos com 255 menos o valor original, criando assim o negativo nesta região. Se após criado o negativo for apertada a tecla <strong>z</strong>, o programa é fechado. Caso contrario, será carregada novamente a imagem e o programa esperará mais uma região para negativo.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -698,10 +703,219 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_exercicios_3_2">Exercicios 3.2</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_labeling_py">labeling.py</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-kn">import</span> <span class="tok-nn">cv2</span>
+<span class="tok-kn">import</span> <span class="tok-nn">copy</span>
+<span class="tok-kn">from</span> <span class="tok-nn">collections</span> <span class="tok-kn">import</span> <span class="tok-n">deque</span>
+
+<span class="tok-n">lista_1</span> <span class="tok-o">=</span> <span class="tok-n">deque</span><span class="tok-p">()</span>
+<span class="tok-n">numero</span> <span class="tok-o">=</span> <span class="tok-mi">0</span>
+<span class="tok-n">com_furo</span> <span class="tok-o">=</span> <span class="tok-mi">0</span>
+
+<span class="tok-k">def</span> <span class="tok-nf">floodfill</span><span class="tok-p">(</span><span class="tok-n">pixel</span><span class="tok-p">,</span><span class="tok-n">valor</span><span class="tok-p">):</span>
+    <span class="tok-k">global</span> <span class="tok-n">lista_1</span><span class="tok-p">,</span> <span class="tok-n">im_2</span>
+    <span class="tok-n">troca</span> <span class="tok-o">=</span> <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-n">pixel</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">],</span><span class="tok-n">pixel</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">]]</span>
+
+    <span class="tok-n">lista_1</span><span class="tok-o">.</span><span class="tok-n">append</span><span class="tok-p">(</span><span class="tok-n">pixel</span><span class="tok-p">)</span>
+    <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-n">pixel</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">],</span><span class="tok-n">pixel</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">]]</span> <span class="tok-o">=</span> <span class="tok-n">valor</span>
+    <span class="tok-k">while</span> <span class="tok-ow">not</span> <span class="tok-nb">len</span><span class="tok-p">(</span><span class="tok-n">lista_1</span><span class="tok-p">)</span> <span class="tok-o">==</span> <span class="tok-mi">0</span><span class="tok-p">:</span>
+        <span class="tok-n">elemento</span> <span class="tok-o">=</span> <span class="tok-n">lista_1</span><span class="tok-o">.</span><span class="tok-n">pop</span><span class="tok-p">()</span>
+        <span class="tok-k">for</span> <span class="tok-n">x</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">,</span> <span class="tok-mi">2</span><span class="tok-p">):</span>
+            <span class="tok-k">for</span> <span class="tok-n">y</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">,</span> <span class="tok-mi">2</span><span class="tok-p">):</span>
+                <span class="tok-k">try</span><span class="tok-p">:</span>
+                    <span class="tok-k">if</span> <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-n">elemento</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">]</span> <span class="tok-o">+</span> <span class="tok-n">x</span><span class="tok-p">,</span> <span class="tok-n">elemento</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">]</span> <span class="tok-o">+</span> <span class="tok-n">y</span><span class="tok-p">]</span> <span class="tok-o">==</span> <span class="tok-n">troca</span> <span class="tok-ow">and</span> <span class="tok-ow">not</span> <span class="tok-p">[</span><span class="tok-n">elemento</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">]</span> <span class="tok-o">+</span> <span class="tok-n">x</span><span class="tok-p">,</span> <span class="tok-n">elemento</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">]</span> <span class="tok-o">+</span> <span class="tok-n">y</span><span class="tok-p">]</span> <span class="tok-ow">in</span> <span class="tok-n">lista_1</span><span class="tok-p">:</span>
+                        <span class="tok-n">lista_1</span><span class="tok-o">.</span><span class="tok-n">append</span><span class="tok-p">([</span><span class="tok-n">elemento</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">]</span> <span class="tok-o">+</span> <span class="tok-n">x</span><span class="tok-p">,</span> <span class="tok-n">elemento</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">]</span> <span class="tok-o">+</span> <span class="tok-n">y</span><span class="tok-p">])</span>
+                        <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-n">elemento</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">]</span> <span class="tok-o">+</span> <span class="tok-n">x</span><span class="tok-p">,</span> <span class="tok-n">elemento</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">]</span> <span class="tok-o">+</span> <span class="tok-n">y</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-n">valor</span>
+
+                <span class="tok-k">except</span><span class="tok-p">:</span>
+                    <span class="tok-k">pass</span>
+
+
+<span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imread</span><span class="tok-p">(</span><span class="tok-s2">&quot;bolhas.png&quot;</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">namedWindow</span><span class="tok-p">(</span><span class="tok-s2">&quot;image&quot;</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s2">&quot;image&quot;</span><span class="tok-p">,</span> <span class="tok-n">image</span><span class="tok-p">)</span>
+<span class="tok-n">height</span><span class="tok-p">,</span> <span class="tok-n">width</span> <span class="tok-o">=</span> <span class="tok-n">image</span><span class="tok-o">.</span><span class="tok-n">shape</span>
+<span class="tok-n">im_2</span> <span class="tok-o">=</span> <span class="tok-n">copy</span><span class="tok-o">.</span><span class="tok-n">copy</span><span class="tok-p">(</span><span class="tok-n">image</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">waitKey</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+
+
+<span class="tok-k">for</span> <span class="tok-n">x</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-n">width</span><span class="tok-p">):</span>
+    <span class="tok-k">if</span> <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-n">x</span><span class="tok-p">]</span> <span class="tok-o">==</span> <span class="tok-mi">255</span><span class="tok-p">:</span>
+        <span class="tok-n">floodfill</span><span class="tok-p">([</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-n">x</span><span class="tok-p">],</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+    <span class="tok-k">if</span> <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">,</span> <span class="tok-n">x</span><span class="tok-p">]</span> <span class="tok-o">==</span> <span class="tok-mi">255</span><span class="tok-p">:</span>
+        <span class="tok-n">floodfill</span><span class="tok-p">([</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-n">x</span><span class="tok-p">],</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+
+<span class="tok-k">for</span> <span class="tok-n">y</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-n">width</span><span class="tok-p">):</span>
+    <span class="tok-k">if</span> <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-n">y</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">]</span> <span class="tok-o">==</span> <span class="tok-mi">255</span><span class="tok-p">:</span>
+        <span class="tok-n">floodfill</span><span class="tok-p">([</span><span class="tok-n">y</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">],</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+    <span class="tok-k">if</span> <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-n">y</span><span class="tok-p">,</span> <span class="tok-n">width</span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">]</span> <span class="tok-o">==</span> <span class="tok-mi">255</span><span class="tok-p">:</span>
+        <span class="tok-n">floodfill</span><span class="tok-p">([</span><span class="tok-n">y</span><span class="tok-p">,</span> <span class="tok-n">width</span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">],</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+
+<span class="tok-n">numero</span> <span class="tok-o">+=</span> <span class="tok-mi">20</span>
+<span class="tok-k">for</span> <span class="tok-n">x</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-n">width</span><span class="tok-p">):</span>
+    <span class="tok-k">for</span> <span class="tok-n">y</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-p">):</span>
+        <span class="tok-k">if</span> <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-n">x</span><span class="tok-p">,</span><span class="tok-n">y</span><span class="tok-p">]</span> <span class="tok-o">==</span> <span class="tok-mi">255</span><span class="tok-p">:</span>
+            <span class="tok-n">floodfill</span><span class="tok-p">([</span><span class="tok-n">x</span><span class="tok-p">,</span><span class="tok-n">y</span><span class="tok-p">],</span><span class="tok-n">numero</span><span class="tok-p">)</span>
+            <span class="tok-n">numero</span> <span class="tok-o">+=</span> <span class="tok-mi">1</span>
+
+<span class="tok-k">print</span><span class="tok-p">(</span><span class="tok-n">numero</span><span class="tok-o">-</span><span class="tok-mi">20</span><span class="tok-p">)</span>
+
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s2">&quot;image&quot;</span><span class="tok-p">,</span> <span class="tok-n">im_2</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">waitKey</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+
+<span class="tok-n">floodfill</span><span class="tok-p">([</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">],</span><span class="tok-mi">255</span><span class="tok-p">)</span>
+
+<span class="tok-k">for</span> <span class="tok-n">x</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-p">):</span>
+    <span class="tok-k">for</span> <span class="tok-n">y</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-n">width</span><span class="tok-p">):</span>
+        <span class="tok-k">if</span> <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-n">y</span><span class="tok-p">,</span><span class="tok-n">x</span><span class="tok-p">]</span> <span class="tok-o">==</span> <span class="tok-mi">0</span><span class="tok-p">:</span>
+            <span class="tok-n">floodfill</span><span class="tok-p">([</span><span class="tok-n">y</span><span class="tok-p">,</span><span class="tok-n">x</span><span class="tok-p">],</span><span class="tok-mi">255</span><span class="tok-p">)</span>
+            <span class="tok-k">if</span> <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-n">y</span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-n">x</span><span class="tok-p">]</span> <span class="tok-o">!=</span> <span class="tok-mi">255</span><span class="tok-p">:</span>
+                <span class="tok-n">com_furo</span> <span class="tok-o">+=</span> <span class="tok-mi">1</span>
+                <span class="tok-n">floodfill</span><span class="tok-p">([</span><span class="tok-n">y</span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-n">x</span><span class="tok-p">],</span><span class="tok-mi">255</span><span class="tok-p">)</span>
+
+<span class="tok-k">print</span><span class="tok-p">(</span><span class="tok-n">com_furo</span><span class="tok-p">)</span>
+
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">waitKey</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">destroyAllWindows</span><span class="tok-p">()</span></code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_explicando_o_codigo_3">Explicando o codigo</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">lista_1</span> <span class="tok-o">=</span> <span class="tok-n">deque</span><span class="tok-p">()</span>
+<span class="tok-n">numero</span> <span class="tok-o">=</span> <span class="tok-mi">0</span>
+<span class="tok-n">com_furo</span> <span class="tok-o">=</span> <span class="tok-mi">0</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Variaveis de acumulo e uma fila.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-k">def</span> <span class="tok-nf">floodfill</span><span class="tok-p">(</span><span class="tok-n">pixel</span><span class="tok-p">,</span><span class="tok-n">valor</span><span class="tok-p">):</span>
+    <span class="tok-k">global</span> <span class="tok-n">lista_1</span><span class="tok-p">,</span> <span class="tok-n">im_2</span>
+    <span class="tok-n">troca</span> <span class="tok-o">=</span> <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-n">pixel</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">],</span><span class="tok-n">pixel</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">]]</span>
+
+    <span class="tok-n">lista_1</span><span class="tok-o">.</span><span class="tok-n">append</span><span class="tok-p">(</span><span class="tok-n">pixel</span><span class="tok-p">)</span>
+    <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-n">pixel</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">],</span><span class="tok-n">pixel</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">]]</span> <span class="tok-o">=</span> <span class="tok-n">valor</span>
+    <span class="tok-k">while</span> <span class="tok-ow">not</span> <span class="tok-nb">len</span><span class="tok-p">(</span><span class="tok-n">lista_1</span><span class="tok-p">)</span> <span class="tok-o">==</span> <span class="tok-mi">0</span><span class="tok-p">:</span>
+        <span class="tok-n">elemento</span> <span class="tok-o">=</span> <span class="tok-n">lista_1</span><span class="tok-o">.</span><span class="tok-n">pop</span><span class="tok-p">()</span>
+        <span class="tok-k">for</span> <span class="tok-n">x</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">,</span> <span class="tok-mi">2</span><span class="tok-p">):</span>
+            <span class="tok-k">for</span> <span class="tok-n">y</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">,</span> <span class="tok-mi">2</span><span class="tok-p">):</span>
+                <span class="tok-k">try</span><span class="tok-p">:</span>
+                    <span class="tok-k">if</span> <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-n">elemento</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">]</span> <span class="tok-o">+</span> <span class="tok-n">x</span><span class="tok-p">,</span> <span class="tok-n">elemento</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">]</span> <span class="tok-o">+</span> <span class="tok-n">y</span><span class="tok-p">]</span> <span class="tok-o">==</span> <span class="tok-n">troca</span> <span class="tok-ow">and</span> <span class="tok-ow">not</span> <span class="tok-p">[</span><span class="tok-n">elemento</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">]</span> <span class="tok-o">+</span> <span class="tok-n">x</span><span class="tok-p">,</span> <span class="tok-n">elemento</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">]</span> <span class="tok-o">+</span> <span class="tok-n">y</span><span class="tok-p">]</span> <span class="tok-ow">in</span> <span class="tok-n">lista_1</span><span class="tok-p">:</span>
+                        <span class="tok-n">lista_1</span><span class="tok-o">.</span><span class="tok-n">append</span><span class="tok-p">([</span><span class="tok-n">elemento</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">]</span> <span class="tok-o">+</span> <span class="tok-n">x</span><span class="tok-p">,</span> <span class="tok-n">elemento</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">]</span> <span class="tok-o">+</span> <span class="tok-n">y</span><span class="tok-p">])</span>
+                        <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-n">elemento</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">]</span> <span class="tok-o">+</span> <span class="tok-n">x</span><span class="tok-p">,</span> <span class="tok-n">elemento</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">]</span> <span class="tok-o">+</span> <span class="tok-n">y</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-n">valor</span>
+
+                <span class="tok-k">except</span><span class="tok-p">:</span>
+                    <span class="tok-k">pass</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Função para realizar o floodfill a partir de um <strong>pixel</strong> preenchendo com um <strong>valor</strong>.
+Primeiramente, é salvo o valor que encontra-se nesse pixel, ele é incluso na fila e muda-se o valor para o <strong>valor</strong> desejado. Depois, enquanto a fila tiver elementos, puxa-se um elemento da fila e procuram-se os elementos na 8-vizinhança deste, e, no caso de algum deles ter o valor original do <strong>pixel</strong> e não estar já incluso na fila, ele é colocado na fila e seu valor é mudado ao desejado.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imread</span><span class="tok-p">(</span><span class="tok-s2">&quot;bolhas.png&quot;</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">namedWindow</span><span class="tok-p">(</span><span class="tok-s2">&quot;image&quot;</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s2">&quot;image&quot;</span><span class="tok-p">,</span> <span class="tok-n">image</span><span class="tok-p">)</span>
+<span class="tok-n">height</span><span class="tok-p">,</span> <span class="tok-n">width</span> <span class="tok-o">=</span> <span class="tok-n">image</span><span class="tok-o">.</span><span class="tok-n">shape</span>
+<span class="tok-n">im_2</span> <span class="tok-o">=</span> <span class="tok-n">copy</span><span class="tok-o">.</span><span class="tok-n">copy</span><span class="tok-p">(</span><span class="tok-n">image</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">waitKey</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A imagem é carregada em tons de cinza, é salvo seus valores de altura e largura e cria-se uma copia da imagem.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-k">for</span> <span class="tok-n">x</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-n">width</span><span class="tok-p">):</span>
+    <span class="tok-k">if</span> <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-n">x</span><span class="tok-p">]</span> <span class="tok-o">==</span> <span class="tok-mi">255</span><span class="tok-p">:</span>
+        <span class="tok-n">floodfill</span><span class="tok-p">([</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-n">x</span><span class="tok-p">],</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+    <span class="tok-k">if</span> <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">,</span> <span class="tok-n">x</span><span class="tok-p">]</span> <span class="tok-o">==</span> <span class="tok-mi">255</span><span class="tok-p">:</span>
+        <span class="tok-n">floodfill</span><span class="tok-p">([</span><span class="tok-n">height</span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-n">x</span><span class="tok-p">],</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+
+<span class="tok-k">for</span> <span class="tok-n">y</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-n">width</span><span class="tok-p">):</span>
+    <span class="tok-k">if</span> <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-n">y</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">]</span> <span class="tok-o">==</span> <span class="tok-mi">255</span><span class="tok-p">:</span>
+        <span class="tok-n">floodfill</span><span class="tok-p">([</span><span class="tok-n">y</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">],</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+    <span class="tok-k">if</span> <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-n">y</span><span class="tok-p">,</span> <span class="tok-n">width</span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">]</span> <span class="tok-o">==</span> <span class="tok-mi">255</span><span class="tok-p">:</span>
+        <span class="tok-n">floodfill</span><span class="tok-p">([</span><span class="tok-n">y</span><span class="tok-p">,</span> <span class="tok-n">width</span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">],</span><span class="tok-mi">0</span><span class="tok-p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>São percorridas as bordas horizontais e verticais, e no caso de achar um pixel com valor 255, é utilizado o floodfill para eliminar essa bolha da imagem.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">numero</span> <span class="tok-o">+=</span> <span class="tok-mi">20</span>
+<span class="tok-k">for</span> <span class="tok-n">x</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-n">width</span><span class="tok-p">):</span>
+    <span class="tok-k">for</span> <span class="tok-n">y</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-p">):</span>
+        <span class="tok-k">if</span> <span class="tok-n">im_2</span><span class="tok-p">[</span><span class="tok-n">x</span><span class="tok-p">,</span><span class="tok-n">y</span><span class="tok-p">]</span> <span class="tok-o">==</span> <span class="tok-mi">255</span><span class="tok-p">:</span>
+            <span class="tok-n">floodfill</span><span class="tok-p">([</span><span class="tok-n">x</span><span class="tok-p">,</span><span class="tok-n">y</span><span class="tok-p">],</span><span class="tok-n">numero</span><span class="tok-p">)</span>
+            <span class="tok-n">numero</span> <span class="tok-o">+=</span> <span class="tok-mi">1</span>
+
+<span class="tok-k">print</span><span class="tok-p">(</span><span class="tok-n">numero</span><span class="tok-o">-</span><span class="tok-mi">20</span><span class="tok-p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A imagém é percorrida pixel a pixel procurando por valores iguais a 255, e no caso de achar, utiliza-se o floodfill com o valor da variavel <strong>numero</strong> que é incrementada após cada floodfill. Ao final, o valor na variavel <strong>numero</strong> corresponde ao numero de bolhas na imagem.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Foi utilizado um offset de 20 na variavel <strong>numero</strong> apenas pra melhor contraste das bolhas no fundo.
+</td>
+</tr>
+</table>
+</div>
+<div class="openblock float-group">
+<div class="content">
+<div class="imageblock left">
+<div class="content">
+<img src="imagens/bolhas.png" alt="bolhas">
+</div>
+<div class="title">Figure 4. Original</div>
+</div>
+<div class="imageblock left" style="text-align: right">
+<div class="content">
+<img src="imagens/bolhas_contadas.png" alt="bolhas contadas">
+</div>
+<div class="title">Figure 5. Após contagem</div>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+21 bolhas!
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-09-12 16:20:22 Hora PadrÒo de Buenos Aires
+Last updated 2017-09-12 17:11:42 Hora PadrÒo de Buenos Aires
 </div>
 </div>
 </body>

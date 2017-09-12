@@ -1,6 +1,7 @@
 :source-highlighter: pygments
 :imagesdir: imagens
 :toc: left
+:toc-title: Sumário
 
 = Trabalhos de PDI
 Andrés Alvarado <andresaar94@gmail.com>
@@ -40,7 +41,7 @@ A imagem é carregada como tons de cinza e é feita a ligação do evento do mou
 include::programas/regions.py[lines=25..38]
 ----
 
-Ao criar uma área com o mouse, os pixels dentro dessa area serão substituidos com 255 menos o valor original, criando assim o negativo nesta região. Se após criado o negativo for apertada a tecla *z*, o programa é fechado. Caso contrario, será carregada novamente a imagem e o programa esperara mais uma região para negativo.
+Ao criar uma área com o mouse, os pixels dentro dessa area serão substituidos com 255 menos o valor original, criando assim o negativo nesta região. Se após criado o negativo for apertada a tecla *z*, o programa é fechado. Caso contrario, será carregada novamente a imagem e o programa esperará mais uma região para negativo.
 
 .Aplicado o negativo
 image::nina_neg.jpg[]
@@ -70,3 +71,65 @@ A imagem é dividida horizontalmente em duas imagens na metade da altura, e depo
 
 .Aplicado o programa
 image::nina_troca.jpg[]
+
+== Exercicios 3.2
+
+=== labeling.py
+
+[source,python]
+----
+include::programas/labeling.py[]
+----
+
+==== Explicando o codigo
+
+[source,python]
+----
+include::programas/labeling.py[lines=5..7]
+----
+
+Variaveis de acumulo e uma fila.
+
+[source,python]
+----
+include::programas/labeling.py[lines=9..25]
+----
+
+Função para realizar o floodfill a partir de um *pixel* preenchendo com um *valor*.
+Primeiramente, é salvo o valor que encontra-se nesse pixel, ele é incluso na fila e muda-se o valor para o *valor* desejado. Depois, enquanto a fila tiver elementos, puxa-se um elemento da fila e procuram-se os elementos na 8-vizinhança deste, e, no caso de algum deles ter o valor original do *pixel* e não estar já incluso na fila, ele é colocado na fila e seu valor é mudado ao desejado.
+
+[source,python]
+----
+include::programas/labeling.py[lines=28..33]
+----
+
+A imagem é carregada em tons de cinza, é salvo seus valores de altura e largura e cria-se uma copia da imagem.
+
+[source,python]
+----
+include::programas/labeling.py[lines=36..46]
+----
+
+São percorridas as bordas horizontais e verticais, e no caso de achar um pixel com valor 255, é utilizado o floodfill para eliminar essa bolha da imagem.
+
+[source,python]
+----
+include::programas/labeling.py[lines=48..55]
+----
+
+A imagém é percorrida pixel a pixel procurando por valores iguais a 255, e no caso de achar, utiliza-se o floodfill com o valor da variavel *numero* que é incrementada após cada floodfill. Ao final, o valor na variavel *numero* corresponde ao numero de bolhas na imagem.
+
+NOTE: Foi utilizado um offset de 20 na variavel *numero* apenas pra melhor contraste das bolhas no fundo.
+
+[.float-group]
+--
+[.left]
+.Original
+image::bolhas.png[]
+
+[.left]
+.Após contagem
+image::bolhas_contadas.png[align=right]
+--
+
+NOTE: 21 bolhas!
