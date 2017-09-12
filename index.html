@@ -497,18 +497,38 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .listingblock .pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </style>
 </head>
-<body class="article">
+<body class="article toc2 toc-left">
 <div id="header">
 <h1>Trabalhos de PDI</h1>
 <div class="details">
 <span id="author" class="author">Andrés Alvarado</span><br>
 <span id="email" class="email"><a href="mailto:andresaar94@gmail.com">andresaar94@gmail.com</a></span><br>
 </div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_exercicio_2_2">Exercicio 2.2</a>
+<ul class="sectlevel2">
+<li><a href="#_regions_py">regions.py</a></li>
+<li><a href="#_trocaregioes_py">trocaregioes.py</a></li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 <div id="content">
 <div class="sect1">
 <h2 id="_exercicio_2_2">Exercicio 2.2</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Para estas atividades foi utilizada a seguinte imagem, carregada apenas em tom de cinza:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="imagens/nina.jpg" alt="nina">
+</div>
+<div class="title">Figure 1. nina.jpg</div>
+</div>
 <div class="sect2">
 <h3 id="_regions_py">regions.py</h3>
 <div class="listingblock">
@@ -556,9 +576,123 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">destroyAllWindows</span><span class="tok-p">()</span></code></pre>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_explicando_o_codigo">Explicando o codigo</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-k">def</span> <span class="tok-nf">click_and_crop</span><span class="tok-p">(</span><span class="tok-n">event</span><span class="tok-p">,</span> <span class="tok-n">x</span><span class="tok-p">,</span> <span class="tok-n">y</span><span class="tok-p">,</span> <span class="tok-n">flags</span><span class="tok-p">,</span> <span class="tok-n">param</span><span class="tok-p">):</span>
+    <span class="tok-c1"># grab references to the global variables</span>
+    <span class="tok-k">global</span> <span class="tok-n">refPt</span>
+    <span class="tok-c1"># if the left mouse button was clicked, record the starting</span>
+    <span class="tok-c1"># (x, y) coordinates and indicate that cropping is being</span>
+    <span class="tok-c1"># performed</span>
+    <span class="tok-k">if</span> <span class="tok-n">event</span> <span class="tok-o">==</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">EVENT_LBUTTONDOWN</span><span class="tok-p">:</span>
+        <span class="tok-n">refPt</span> <span class="tok-o">=</span> <span class="tok-p">[(</span><span class="tok-n">x</span><span class="tok-p">,</span> <span class="tok-n">y</span><span class="tok-p">)]</span>
+
+    <span class="tok-c1"># check to see if the left mouse button was released</span>
+    <span class="tok-k">elif</span> <span class="tok-n">event</span> <span class="tok-o">==</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">EVENT_LBUTTONUP</span><span class="tok-p">:</span>
+        <span class="tok-c1"># record the ending (x, y) coordinates and indicate that</span>
+        <span class="tok-c1"># the cropping operation is finished</span>
+        <span class="tok-n">refPt</span><span class="tok-o">.</span><span class="tok-n">append</span><span class="tok-p">((</span><span class="tok-n">x</span><span class="tok-p">,</span> <span class="tok-n">y</span><span class="tok-p">))</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Esta função serve para pegar os valores em (x,y) dos pontos onde o mouse aperta e posteriormente solta encima da tela e salvá-los em um vetor, que será a região onde será aplicado o negativo.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imread</span><span class="tok-p">(</span><span class="tok-s2">&quot;nina.jpg&quot;</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">namedWindow</span><span class="tok-p">(</span><span class="tok-s2">&quot;image&quot;</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">setMouseCallback</span><span class="tok-p">(</span><span class="tok-s2">&quot;image&quot;</span><span class="tok-p">,</span> <span class="tok-n">click_and_crop</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s2">&quot;image&quot;</span><span class="tok-p">,</span> <span class="tok-n">image</span><span class="tok-p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A imagem é carregada como tons de cinza e é feita a ligação do evento do mouse com a função <strong>click_and_crop</strong>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-k">while</span> <span class="tok-bp">True</span><span class="tok-p">:</span>
+    <span class="tok-n">key</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">waitKey</span><span class="tok-p">(</span><span class="tok-mi">10</span><span class="tok-p">)</span> <span class="tok-o">&amp;</span> <span class="tok-mh">0xFF</span>
+    <span class="tok-k">if</span> <span class="tok-nb">len</span><span class="tok-p">(</span><span class="tok-n">refPt</span><span class="tok-p">)</span><span class="tok-o">==</span><span class="tok-mi">2</span><span class="tok-p">:</span>
+        <span class="tok-k">for</span> <span class="tok-n">y</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-n">refPt</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">][</span><span class="tok-mi">0</span><span class="tok-p">],</span> <span class="tok-n">refPt</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">][</span><span class="tok-mi">0</span><span class="tok-p">]):</span>
+            <span class="tok-k">for</span> <span class="tok-n">x</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-n">refPt</span><span class="tok-p">[</span><span class="tok-mi">0</span><span class="tok-p">][</span><span class="tok-mi">1</span><span class="tok-p">],</span> <span class="tok-n">refPt</span><span class="tok-p">[</span><span class="tok-mi">1</span><span class="tok-p">][</span><span class="tok-mi">1</span><span class="tok-p">]):</span>
+                <span class="tok-n">image</span><span class="tok-p">[</span><span class="tok-n">x</span><span class="tok-p">][</span><span class="tok-n">y</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-mi">255</span> <span class="tok-o">-</span> <span class="tok-n">image</span><span class="tok-p">[</span><span class="tok-n">x</span><span class="tok-p">][</span><span class="tok-n">y</span><span class="tok-p">]</span>
+        <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s2">&quot;image&quot;</span><span class="tok-p">,</span> <span class="tok-n">image</span><span class="tok-p">)</span>
+        <span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imread</span><span class="tok-p">(</span><span class="tok-s2">&quot;nina.jpg&quot;</span><span class="tok-p">,</span> <span class="tok-mi">0</span><span class="tok-p">)</span>
+        <span class="tok-n">key</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">waitKey</span><span class="tok-p">()</span>
+        <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s2">&quot;image&quot;</span><span class="tok-p">,</span> <span class="tok-n">image</span><span class="tok-p">)</span>
+        <span class="tok-n">refPt</span> <span class="tok-o">=</span> <span class="tok-p">[]</span>
+        <span class="tok-k">if</span> <span class="tok-n">key</span> <span class="tok-o">==</span> <span class="tok-nb">ord</span><span class="tok-p">(</span><span class="tok-s2">&quot;z&quot;</span><span class="tok-p">)</span> <span class="tok-ow">or</span> <span class="tok-n">key</span> <span class="tok-o">==</span> <span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">:</span>
+            <span class="tok-k">break</span>
+        <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s2">&quot;image&quot;</span><span class="tok-p">,</span> <span class="tok-n">image</span><span class="tok-p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ao criar uma área com o mouse, os pixels dentro dessa area serão substituidos com 255 menos o valor original, criando assim o negativo nesta região. Se após criado o negativo for apertada a tecla <strong>z</strong>, o programa é fechado. Caso contrario, será carregada novamente a imagem e o programa esperara mais uma região para negativo.</p>
+</div>
 <div class="imageblock">
 <div class="content">
-<img src="imagens/nina.jpg" alt="nina">
+<img src="imagens/nina_neg.jpg" alt="nina neg">
+</div>
+<div class="title">Figure 2. Aplicado o negativo</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_trocaregioes_py">trocaregioes.py</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-kn">import</span> <span class="tok-nn">cv2</span>
+<span class="tok-kn">import</span> <span class="tok-nn">numpy</span> <span class="tok-kn">as</span> <span class="tok-nn">np</span>
+
+<span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imread</span><span class="tok-p">(</span><span class="tok-s2">&quot;nina.jpg&quot;</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s2">&quot;image&quot;</span><span class="tok-p">,</span><span class="tok-n">image</span><span class="tok-p">)</span>
+<span class="tok-n">height</span><span class="tok-p">,</span> <span class="tok-n">width</span> <span class="tok-o">=</span> <span class="tok-n">image</span><span class="tok-o">.</span><span class="tok-n">shape</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">waitKey</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+
+
+<span class="tok-p">[</span><span class="tok-n">a</span><span class="tok-p">,</span><span class="tok-n">b</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">split</span><span class="tok-p">(</span><span class="tok-n">image</span><span class="tok-p">,[</span><span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">)],</span> <span class="tok-mi">0</span><span class="tok-p">)</span>
+<span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">concatenate</span><span class="tok-p">((</span><span class="tok-n">b</span><span class="tok-p">,</span><span class="tok-n">a</span><span class="tok-p">))</span>
+<span class="tok-p">[</span><span class="tok-n">a</span><span class="tok-p">,</span><span class="tok-n">b</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">split</span><span class="tok-p">(</span><span class="tok-n">image</span><span class="tok-p">,[</span><span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-n">width</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">)],</span> <span class="tok-mi">1</span><span class="tok-p">)</span>
+<span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">concatenate</span><span class="tok-p">((</span><span class="tok-n">b</span><span class="tok-p">,</span><span class="tok-n">a</span><span class="tok-p">),</span><span class="tok-mi">1</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s2">&quot;image&quot;</span><span class="tok-p">,</span><span class="tok-n">image</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">waitKey</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">destroyAllWindows</span><span class="tok-p">()</span></code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_explicando_o_codigo_2">Explicando o codigo</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imread</span><span class="tok-p">(</span><span class="tok-s2">&quot;nina.jpg&quot;</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s2">&quot;image&quot;</span><span class="tok-p">,</span><span class="tok-n">image</span><span class="tok-p">)</span>
+<span class="tok-n">height</span><span class="tok-p">,</span> <span class="tok-n">width</span> <span class="tok-o">=</span> <span class="tok-n">image</span><span class="tok-o">.</span><span class="tok-n">shape</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">waitKey</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A imagem é carregada como tons de cinza e pegam-se seus valores de altura e largura, depois é esperado o apertar de alguma tecla.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-p">[</span><span class="tok-n">a</span><span class="tok-p">,</span><span class="tok-n">b</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">split</span><span class="tok-p">(</span><span class="tok-n">image</span><span class="tok-p">,[</span><span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">)],</span> <span class="tok-mi">0</span><span class="tok-p">)</span>
+<span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">concatenate</span><span class="tok-p">((</span><span class="tok-n">b</span><span class="tok-p">,</span><span class="tok-n">a</span><span class="tok-p">))</span>
+<span class="tok-p">[</span><span class="tok-n">a</span><span class="tok-p">,</span><span class="tok-n">b</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">split</span><span class="tok-p">(</span><span class="tok-n">image</span><span class="tok-p">,[</span><span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-n">width</span><span class="tok-o">/</span><span class="tok-mi">2</span><span class="tok-p">)],</span> <span class="tok-mi">1</span><span class="tok-p">)</span>
+<span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">concatenate</span><span class="tok-p">((</span><span class="tok-n">b</span><span class="tok-p">,</span><span class="tok-n">a</span><span class="tok-p">),</span><span class="tok-mi">1</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s2">&quot;image&quot;</span><span class="tok-p">,</span><span class="tok-n">image</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">waitKey</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A imagem é dividida horizontalmente em duas imagens na metade da altura, e depois concatenadas na ordem contraria. O mesmo é feito novamente mas no sentido vertical com metade da largura da imagem.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="imagens/nina_troca.jpg" alt="nina troca">
+</div>
+<div class="title">Figure 3. Aplicado o programa</div>
 </div>
 </div>
 </div>
@@ -567,7 +701,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-09-12 15:26:05 Hora PadrÒo de Buenos Aires
+Last updated 2017-09-12 16:20:22 Hora PadrÒo de Buenos Aires
 </div>
 </div>
 </body>
