@@ -3,12 +3,12 @@ import numpy as np
 from copy import copy
 
 video_r = cv2.VideoCapture("traffic.mp4")
-fourcc = cv2.VideoWriter_fourcc(*'DIVX')
-video_w = cv2.VideoWriter("traffic_tilt.mp4", fourcc, video_r.get(cv2.CAP_PROP_FPS), (int(video_r.get(cv2.CAP_PROP_FRAME_HEIGHT)),int(video_r.get(cv2.CAP_PROP_FRAME_WIDTH))))
+fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+video_w = cv2.VideoWriter("traffic_tilt.avi",fourcc , video_r.get(cv2.CAP_PROP_FPS), (int(video_r.get(cv2.CAP_PROP_FRAME_WIDTH)),int(video_r.get(cv2.CAP_PROP_FRAME_HEIGHT))),True)
 
-l1 = 100
-l2 = 150
-d = 25
+l1 = 400
+l2 = 600
+d = 20
 m = 0
 
 
@@ -41,6 +41,13 @@ while True:
     ret, frame = video_r.read()
     if not ret:
         break
+    if not ret:
+        break
+    ret, frame = video_r.read()
+    if not ret:
+        break
+
+
 
     height, width, depth = frame.shape
     result = np.zeros([height,width,depth])
@@ -62,11 +69,15 @@ while True:
     applyTilt(frame, frame_blur)
 
     result = np.array(result,dtype=np.uint8)
+    # cv2.waitKey(2)
+
+    # cv2.imshow("hola", result)
 
     video_w.write(result)
 
 video_r.release()
 video_w.release()
+cv2.destroyAllWindows()
 
 
 

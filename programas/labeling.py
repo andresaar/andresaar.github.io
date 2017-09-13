@@ -46,8 +46,8 @@ for y in range(width):
         floodfill([y, width-1],0)
 
 numero += 20
-for x in range(width):
-    for y in range(height):
+for x in range(height):
+    for y in range(width):
         if im_2[x,y] == 255:
             floodfill([x,y],numero)
             numero += 1
@@ -61,11 +61,11 @@ floodfill([0,0],255)
 
 for x in range(height):
     for y in range(width):
-        if im_2[y,x] == 0:
-            floodfill([y,x],255)
-            if im_2[y-1,x] != 255:
+        if im_2[x,y] == 0:
+            floodfill([x,y],255)
+            if im_2[x,y-1] != 255:
                 com_furo += 1
-                floodfill([y-1,x],255)
+                floodfill([x,y-1],255)
 
 print(com_furo)
 

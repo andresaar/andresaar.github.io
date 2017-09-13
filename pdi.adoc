@@ -2,6 +2,7 @@
 :imagesdir: imagens
 :toc: left
 :toc-title: Sumário
+:stem:
 
 = Trabalhos de PDI
 Andrés Alvarado <andresaar94@gmail.com>
@@ -133,3 +134,168 @@ image::bolhas_contadas.png[align=right]
 --
 
 NOTE: 21 bolhas!
+
+[source,python]
+----
+include::programas/labeling.py[lines=60]
+----
+
+Coloca todo o fundo como 255
+
+[source,python]
+----
+include::programas/labeling.py[lines=62..70]
+----
+
+Percorre todos os pixels da imagem, se achar algum com valor de 0 (antigo fundo), aplica floodfill nesse pixel com valor 255, e se o pixel anterior tiver valor diferente de 255 quer dizer que a figura tinha furo, entao aumenta o contador e aplica floodfill nesse pixel anterior, que seria a bolha.
+
+.Resultado da tela
+image::resultado_labeling.png[]
+
+NOTE: 21 bolhas e 7 delas tem furo.
+
+== Exercicios 4.2
+
+Para o exercicio foi utilizada a seguinte imagem carregada em tons de cinza:
+
+.nina.jpg
+image::nina.jpg[]
+
+=== equalize.py
+
+[source,python]
+----
+include::programas/equalize.py[]
+----
+
+==== Explicando o codigo
+
+[source,python]
+----
+include::programas/equalize.py[lines=12..17]
+----
+
+É calculado o histograma da imagem e posteriormente é calculado seu histograma acumulado.
+
+
+[source,python]
+----
+include::programas/equalize.py[lines=25..28]
+----
+
+É criada a imagem equalizada seguindo a seguinte formula:
+
+asciimath:[eq(x,y) = (ha(og(x,y)))/(H*W)*255]
+
+[NOTE]
+======
+_eq_: imagem equalizada
+
+_ha_: histograma acumulado
+
+_og_: imagem original
+
+_H_: altura da imagem
+
+_W_: largura da imagem
+======
+
+[source,python]
+----
+include::programas/equalize.py[lines=30]
+----
+
+Calcula o histograma para nova imagem
+
+.Imagem equalizada
+image::nina_eq.jpg[]
+
+.Histogramas (original: preto & equalizado: vermelho)
+image::hist.png[]
+
+== Exercicios 5.2
+
+Foi utilizada a imagem da atividade anterior para este exercicio.
+
+=== filtroespacial.py
+
+[source,python]
+----
+include::programas/filtroespacial.py[]
+----
+
+==== Explicando o codigo
+
+[source,python]
+----
+include::programas/filtroespacial.py[lines=86..94]
+----
+
+Primeiramente aplica o filtro gaussiano na imagem, e em seguida aplica o laplaciano encima da imagem produzida após a filtragem gaussiana.
+
+.Imagem com filtro gaussiano e laplaciano (sem absoluto)
+image::nina_gauslap1.jpg[]
+
+.Imagem com filtro gaussiano e laplaciano (com absoluto)
+image::nina_gauslap2.jpg[]
+
+== Exercicios 6.1
+
+=== tiltshift.py
+
+[source,python]
+----
+include::programas/tiltshift.py[]
+----
+
+==== Explicando o codigo
+
+[source,python]
+----
+include::programas/tiltshift.py[lines=11..18]
+----
+
+Carrega a imagem e aumenta sua saturação em 150%.
+
+[source,python]
+----
+include::programas/tiltshift.py[lines=23..27]
+----
+
+Cria uma imagem borrada da original, passando 10 vezes um filtro de media 3x3.
+
+[source,python]
+----
+include::programas/tiltshift.py[lines=31..48]
+----
+
+Funções que atualizam os parametros do tiltshift com as trackbars.
+
+[source,python]
+----
+include::programas/tiltshift.py[lines=50..51]
+----
+
+Alpha que indica o decaimento do filtro tilt.
+
+asciimath:[alpha = 0.5 * (tanh((x-l1)/(d+0.0001)) - tanh((x-l2)/(d+0.0001)))]
+
+[source,python]
+----
+include::programas/tiltshift.py[lines=53..69]
+----
+
+Cria a mascara com o decaimento, cria o negativo da mascara e é aplicado o efeito criando uma nova imagem que é a soma da imagem original filtrada pela mascara *filtro* mais a imagem borrada filtrada pela mascara *filtro_negativo*
+
+.Imagem original
+image::natal.jpg[]
+
+.Imagem aplicado o efeito tilt_shift
+image::tilt.jpg[]
+
+=== tiltshift_video.py
+
+[source,python]
+----
+include::programas/tiltshift_video.py[]
+----
