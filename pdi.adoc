@@ -299,3 +299,45 @@ image::tilt.jpg[]
 ----
 include::programas/tiltshift_video.py[]
 ----
+
+== Exercicio 8.2
+
+=== homomorfico.py
+
+[source,python]
+----
+include::programas/homomorfico.py[]
+----
+
+==== Explicando o codigo
+
+[source,python]
+----
+include::programas/homomorfico.py[lines=69..79]
+----
+
+Carrega a imagem em tons de cinza, coloca um padding para chegar no tamanho otimo para a FFT. Soma 1 em toda a imagem para não ter log(0), e depois é aplicado logaritmo neperiano em toda a imagem.
+
+Após isso, é aplicada a DFT e um shift dos quadrantes da imagem resultante.
+
+.Imagem do espectro de frequencia
+image::espectro.png[]
+
+[source,python]
+----
+include::programas/homomorfico.py[lines=7..32]
+----
+
+É criada uma mascara, utilizando a função:
+
+asciimath:[H(u,v) = (gamma_h - gamma_l)*exp(-c(Du^2(u,v))/(Do^2)) + gamma_l]
+
+usada como filtro do espectro frequencial.
+
+Depois, é feita a troca de quadrantes novamente e aplicada a transformada inversa. É retornada a magnitude dessa matriz, aplicada uma exponencial, e normalizada para poder imprimir a imagem.
+
+.Imagem original
+image::escura.jpg[]
+
+.Imagem filtrada
+image::filtered.png[]

@@ -534,6 +534,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_tiltshift_video_py">tiltshift_video.py</a></li>
 </ul>
 </li>
+<li><a href="#_exercicio_8_2">Exercicio 8.2</a>
+<ul class="sectlevel2">
+<li><a href="#_homomorfico_py">homomorfico.py</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -1538,10 +1543,201 @@ Foi utilizado um offset de 20 na variavel <strong>numero</strong> apenas pra mel
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_exercicio_8_2">Exercicio 8.2</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_homomorfico_py">homomorfico.py</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-kn">import</span> <span class="tok-nn">cv2</span>
+<span class="tok-kn">import</span> <span class="tok-nn">numpy</span> <span class="tok-kn">as</span> <span class="tok-nn">np</span>
+<span class="tok-kn">from</span> <span class="tok-nn">math</span> <span class="tok-kn">import</span> <span class="tok-n">exp</span><span class="tok-p">,</span> <span class="tok-n">sqrt</span>
+<span class="tok-n">gh</span><span class="tok-p">,</span> <span class="tok-n">gl</span><span class="tok-p">,</span> <span class="tok-n">c</span><span class="tok-p">,</span> <span class="tok-n">d0</span> <span class="tok-o">=</span> <span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-mi">0</span>
+<span class="tok-n">g</span><span class="tok-p">,</span> <span class="tok-n">cv</span><span class="tok-p">,</span> <span class="tok-n">dv</span> <span class="tok-o">=</span> <span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-mi">0</span>
+
+<span class="tok-k">def</span> <span class="tok-nf">aplicaFiltro</span><span class="tok-p">():</span>
+    <span class="tok-k">global</span> <span class="tok-n">gh</span><span class="tok-p">,</span> <span class="tok-n">gl</span><span class="tok-p">,</span> <span class="tok-n">c</span><span class="tok-p">,</span> <span class="tok-n">d0</span><span class="tok-p">,</span> <span class="tok-nb">complex</span>
+    <span class="tok-n">du</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">zeros</span><span class="tok-p">(</span><span class="tok-nb">complex</span><span class="tok-o">.</span><span class="tok-n">shape</span><span class="tok-p">,</span> <span class="tok-n">dtype</span><span class="tok-o">=</span><span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">float32</span><span class="tok-p">)</span>
+    <span class="tok-k">for</span> <span class="tok-n">u</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-n">dft_M</span><span class="tok-p">):</span>
+        <span class="tok-k">for</span> <span class="tok-n">v</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-n">dft_N</span><span class="tok-p">):</span>
+            <span class="tok-n">du</span><span class="tok-p">[</span><span class="tok-n">u</span><span class="tok-p">,</span><span class="tok-n">v</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-n">sqrt</span><span class="tok-p">((</span><span class="tok-n">u</span><span class="tok-o">-</span><span class="tok-n">dft_M</span><span class="tok-o">/</span><span class="tok-mf">2.0</span><span class="tok-p">)</span><span class="tok-o">*</span><span class="tok-p">(</span><span class="tok-n">u</span><span class="tok-o">-</span><span class="tok-n">dft_M</span><span class="tok-o">/</span><span class="tok-mf">2.0</span><span class="tok-p">)</span><span class="tok-o">+</span><span class="tok-p">(</span><span class="tok-n">v</span><span class="tok-o">-</span><span class="tok-n">dft_N</span><span class="tok-o">/</span><span class="tok-mf">2.0</span><span class="tok-p">)</span><span class="tok-o">*</span><span class="tok-p">(</span><span class="tok-n">v</span><span class="tok-o">-</span><span class="tok-n">dft_N</span><span class="tok-o">/</span><span class="tok-mf">2.0</span><span class="tok-p">))</span>
+
+    <span class="tok-n">du2</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">multiply</span><span class="tok-p">(</span><span class="tok-n">du</span><span class="tok-p">,</span><span class="tok-n">du</span><span class="tok-p">)</span> <span class="tok-o">/</span> <span class="tok-p">(</span><span class="tok-n">d0</span><span class="tok-o">*</span><span class="tok-n">d0</span><span class="tok-p">)</span>
+    <span class="tok-n">re</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">exp</span><span class="tok-p">(</span><span class="tok-o">-</span> <span class="tok-n">c</span> <span class="tok-o">*</span> <span class="tok-n">du2</span><span class="tok-p">)</span>
+    <span class="tok-n">H</span> <span class="tok-o">=</span> <span class="tok-p">(</span><span class="tok-n">gh</span> <span class="tok-o">-</span> <span class="tok-n">gl</span><span class="tok-p">)</span> <span class="tok-o">*</span> <span class="tok-p">(</span><span class="tok-mi">1</span> <span class="tok-o">-</span> <span class="tok-n">re</span><span class="tok-p">)</span> <span class="tok-o">+</span> <span class="tok-n">gl</span>
+    <span class="tok-c1">#cv2.normalize(H, H, 0, 1, cv2.NORM_MINMAX)</span>
+    <span class="tok-c1">#cv2.imshow(&quot;mask&quot;, H[:,:,0])</span>
+
+    <span class="tok-n">filtered</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">mulSpectrums</span><span class="tok-p">(</span><span class="tok-nb">complex</span><span class="tok-p">,</span><span class="tok-n">H</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+    <span class="tok-c1">#filtered = complex*H</span>
+
+    <span class="tok-n">filtered</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">fft</span><span class="tok-o">.</span><span class="tok-n">ifftshift</span><span class="tok-p">(</span><span class="tok-n">filtered</span><span class="tok-p">)</span>
+    <span class="tok-n">filtered</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">idft</span><span class="tok-p">(</span><span class="tok-n">filtered</span><span class="tok-p">)</span>
+    <span class="tok-n">filtered</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">magnitude</span><span class="tok-p">(</span><span class="tok-n">filtered</span><span class="tok-p">[:,:,</span><span class="tok-mi">0</span><span class="tok-p">],</span> <span class="tok-n">filtered</span><span class="tok-p">[:,:,</span><span class="tok-mi">1</span><span class="tok-p">])</span>
+    <span class="tok-c1">#filtered, _ = cv2.split(filtered)</span>
+
+    <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">normalize</span><span class="tok-p">(</span><span class="tok-n">filtered</span><span class="tok-p">,</span><span class="tok-n">filtered</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-mi">1</span><span class="tok-p">,</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">NORM_MINMAX</span><span class="tok-p">)</span>
+    <span class="tok-n">filtered</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">exp</span><span class="tok-p">(</span><span class="tok-n">filtered</span><span class="tok-p">)</span>
+    <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">normalize</span><span class="tok-p">(</span><span class="tok-n">filtered</span><span class="tok-p">,</span> <span class="tok-n">filtered</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-mi">1</span><span class="tok-p">,</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">NORM_MINMAX</span><span class="tok-p">)</span>
+
+    <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s2">&quot;homomorfico&quot;</span><span class="tok-p">,</span> <span class="tok-n">filtered</span><span class="tok-p">)</span>
+
+<span class="tok-k">def</span> <span class="tok-nf">setgl</span><span class="tok-p">(</span><span class="tok-n">g</span><span class="tok-p">):</span>
+    <span class="tok-k">global</span> <span class="tok-n">gl</span>
+    <span class="tok-n">gl</span> <span class="tok-o">=</span> <span class="tok-n">g</span><span class="tok-o">/</span><span class="tok-mf">10.0</span>
+    <span class="tok-k">if</span> <span class="tok-n">gl</span> <span class="tok-o">&gt;</span> <span class="tok-n">gh</span><span class="tok-p">:</span>
+        <span class="tok-n">gl</span> <span class="tok-o">=</span> <span class="tok-n">gh</span><span class="tok-o">-</span><span class="tok-mi">1</span>
+        <span class="tok-n">gl</span> <span class="tok-o">=</span> <span class="tok-n">g</span> <span class="tok-o">/</span> <span class="tok-mf">10.0</span>
+    <span class="tok-n">aplicaFiltro</span><span class="tok-p">()</span>
+
+<span class="tok-k">def</span> <span class="tok-nf">setgh</span><span class="tok-p">(</span><span class="tok-n">g</span><span class="tok-p">):</span>
+    <span class="tok-k">global</span> <span class="tok-n">gh</span>
+    <span class="tok-n">gh</span> <span class="tok-o">=</span> <span class="tok-n">g</span><span class="tok-o">/</span><span class="tok-mf">10.0</span>
+    <span class="tok-k">if</span> <span class="tok-mi">1</span> <span class="tok-o">&gt;</span> <span class="tok-n">gh</span><span class="tok-p">:</span>
+        <span class="tok-n">gh</span> <span class="tok-o">=</span> <span class="tok-mi">1</span>
+        <span class="tok-n">gh</span> <span class="tok-o">=</span> <span class="tok-n">g</span> <span class="tok-o">/</span> <span class="tok-mf">10.0</span>
+    <span class="tok-k">if</span> <span class="tok-n">gl</span> <span class="tok-o">&gt;</span> <span class="tok-n">gh</span><span class="tok-p">:</span>
+        <span class="tok-n">gh</span> <span class="tok-o">=</span> <span class="tok-n">gl</span> <span class="tok-o">+</span> <span class="tok-mi">1</span>
+        <span class="tok-n">gh</span> <span class="tok-o">=</span> <span class="tok-n">g</span> <span class="tok-o">/</span> <span class="tok-mf">10.0</span>
+    <span class="tok-n">aplicaFiltro</span><span class="tok-p">()</span>
+
+<span class="tok-k">def</span> <span class="tok-nf">setc</span><span class="tok-p">(</span><span class="tok-n">cv</span><span class="tok-p">):</span>
+    <span class="tok-k">global</span> <span class="tok-n">c</span>
+    <span class="tok-k">if</span> <span class="tok-n">cv</span> <span class="tok-o">==</span> <span class="tok-mi">0</span><span class="tok-p">:</span>
+        <span class="tok-n">cv</span> <span class="tok-o">=</span> <span class="tok-mi">1</span>
+    <span class="tok-n">c</span> <span class="tok-o">=</span> <span class="tok-n">cv</span><span class="tok-o">/</span><span class="tok-mf">1000.0</span>
+    <span class="tok-n">aplicaFiltro</span><span class="tok-p">()</span>
+
+<span class="tok-k">def</span> <span class="tok-nf">setd0</span><span class="tok-p">(</span><span class="tok-n">dv</span><span class="tok-p">):</span>
+    <span class="tok-k">global</span> <span class="tok-n">d0</span>
+    <span class="tok-n">d0</span> <span class="tok-o">=</span> <span class="tok-n">dv</span><span class="tok-o">/</span><span class="tok-mf">10.0</span>
+    <span class="tok-k">if</span> <span class="tok-n">d0</span> <span class="tok-o">==</span> <span class="tok-mi">0</span><span class="tok-p">:</span>
+        <span class="tok-n">d0</span> <span class="tok-o">=</span> <span class="tok-mi">1</span>
+        <span class="tok-n">d0</span> <span class="tok-o">=</span> <span class="tok-n">dv</span> <span class="tok-o">/</span> <span class="tok-mf">10.0</span>
+    <span class="tok-n">aplicaFiltro</span><span class="tok-p">()</span>
+
+
+<span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imread</span><span class="tok-p">(</span><span class="tok-s2">&quot;escura.jpg&quot;</span><span class="tok-p">,</span> <span class="tok-mi">0</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s2">&quot;original&quot;</span><span class="tok-p">,</span> <span class="tok-n">image</span><span class="tok-p">)</span>
+<span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">float32</span><span class="tok-p">(</span><span class="tok-n">image</span><span class="tok-p">)</span>
+<span class="tok-n">height</span><span class="tok-p">,</span> <span class="tok-n">width</span> <span class="tok-o">=</span> <span class="tok-n">image</span><span class="tok-o">.</span><span class="tok-n">shape</span>
+
+<span class="tok-n">dft_M</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">getOptimalDFTSize</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-p">)</span>
+<span class="tok-n">dft_N</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">getOptimalDFTSize</span><span class="tok-p">(</span><span class="tok-n">width</span><span class="tok-p">)</span>
+<span class="tok-n">padded</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">copyMakeBorder</span><span class="tok-p">(</span><span class="tok-n">image</span><span class="tok-p">,</span> <span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-n">dft_M</span><span class="tok-o">-</span><span class="tok-n">height</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-n">dft_N</span><span class="tok-o">-</span><span class="tok-n">width</span><span class="tok-p">,</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">BORDER_CONSTANT</span><span class="tok-p">,</span> <span class="tok-mi">0</span><span class="tok-p">)</span> <span class="tok-o">+</span> <span class="tok-mi">1</span>
+<span class="tok-n">padded</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">log</span><span class="tok-p">(</span><span class="tok-n">padded</span><span class="tok-p">)</span>
+<span class="tok-nb">complex</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">dft</span><span class="tok-p">(</span><span class="tok-n">padded</span><span class="tok-p">,</span><span class="tok-n">flags</span><span class="tok-o">=</span><span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">DFT_COMPLEX_OUTPUT</span><span class="tok-p">)</span>
+<span class="tok-nb">complex</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">fft</span><span class="tok-o">.</span><span class="tok-n">fftshift</span><span class="tok-p">(</span><span class="tok-nb">complex</span><span class="tok-p">)</span>
+<span class="tok-n">img_back</span> <span class="tok-o">=</span> <span class="tok-mi">20</span><span class="tok-o">*</span><span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">log</span><span class="tok-p">(</span><span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">magnitude</span><span class="tok-p">(</span><span class="tok-nb">complex</span><span class="tok-p">[:,:,</span><span class="tok-mi">0</span><span class="tok-p">],</span><span class="tok-nb">complex</span><span class="tok-p">[:,:,</span><span class="tok-mi">1</span><span class="tok-p">]))</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s2">&quot;fft&quot;</span><span class="tok-p">,</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">uint8</span><span class="tok-p">(</span><span class="tok-n">img_back</span><span class="tok-p">))</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s2">&quot;homomorfico&quot;</span><span class="tok-p">,</span> <span class="tok-n">image</span><span class="tok-p">)</span>
+
+<span class="tok-n">trackbarName</span> <span class="tok-o">=</span> <span class="tok-s2">&quot;GL &quot;</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">createTrackbar</span><span class="tok-p">(</span><span class="tok-n">trackbarName</span><span class="tok-p">,</span><span class="tok-s2">&quot;homomorfico&quot;</span><span class="tok-p">,</span><span class="tok-n">g</span><span class="tok-p">,</span><span class="tok-mi">100</span><span class="tok-p">,</span><span class="tok-n">setgl</span><span class="tok-p">)</span>
+<span class="tok-n">trackbarName</span> <span class="tok-o">=</span> <span class="tok-s2">&quot;GH &quot;</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">createTrackbar</span><span class="tok-p">(</span><span class="tok-n">trackbarName</span><span class="tok-p">,</span><span class="tok-s2">&quot;homomorfico&quot;</span><span class="tok-p">,</span><span class="tok-n">g</span><span class="tok-p">,</span><span class="tok-mi">100</span><span class="tok-p">,</span><span class="tok-n">setgh</span><span class="tok-p">)</span>
+<span class="tok-n">trackbarName</span> <span class="tok-o">=</span> <span class="tok-s2">&quot;C &quot;</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">createTrackbar</span><span class="tok-p">(</span><span class="tok-n">trackbarName</span><span class="tok-p">,</span><span class="tok-s2">&quot;homomorfico&quot;</span><span class="tok-p">,</span><span class="tok-n">cv</span><span class="tok-p">,</span><span class="tok-mi">100</span><span class="tok-p">,</span><span class="tok-n">setc</span><span class="tok-p">)</span>
+<span class="tok-n">trackbarName</span> <span class="tok-o">=</span> <span class="tok-s2">&quot;D0 &quot;</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">createTrackbar</span><span class="tok-p">(</span><span class="tok-n">trackbarName</span><span class="tok-p">,</span><span class="tok-s2">&quot;homomorfico&quot;</span><span class="tok-p">,</span><span class="tok-n">dv</span><span class="tok-p">,</span><span class="tok-n">dft_M</span><span class="tok-p">,</span><span class="tok-n">setd0</span><span class="tok-p">)</span>
+
+
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">waitKey</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">destroyAllWindows</span><span class="tok-p">()</span></code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_explicando_o_codigo_7">Explicando o codigo</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imread</span><span class="tok-p">(</span><span class="tok-s2">&quot;escura.jpg&quot;</span><span class="tok-p">,</span> <span class="tok-mi">0</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s2">&quot;original&quot;</span><span class="tok-p">,</span> <span class="tok-n">image</span><span class="tok-p">)</span>
+<span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">float32</span><span class="tok-p">(</span><span class="tok-n">image</span><span class="tok-p">)</span>
+<span class="tok-n">height</span><span class="tok-p">,</span> <span class="tok-n">width</span> <span class="tok-o">=</span> <span class="tok-n">image</span><span class="tok-o">.</span><span class="tok-n">shape</span>
+
+<span class="tok-n">dft_M</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">getOptimalDFTSize</span><span class="tok-p">(</span><span class="tok-n">height</span><span class="tok-p">)</span>
+<span class="tok-n">dft_N</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">getOptimalDFTSize</span><span class="tok-p">(</span><span class="tok-n">width</span><span class="tok-p">)</span>
+<span class="tok-n">padded</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">copyMakeBorder</span><span class="tok-p">(</span><span class="tok-n">image</span><span class="tok-p">,</span> <span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-n">dft_M</span><span class="tok-o">-</span><span class="tok-n">height</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-n">dft_N</span><span class="tok-o">-</span><span class="tok-n">width</span><span class="tok-p">,</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">BORDER_CONSTANT</span><span class="tok-p">,</span> <span class="tok-mi">0</span><span class="tok-p">)</span> <span class="tok-o">+</span> <span class="tok-mi">1</span>
+<span class="tok-n">padded</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">log</span><span class="tok-p">(</span><span class="tok-n">padded</span><span class="tok-p">)</span>
+<span class="tok-nb">complex</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">dft</span><span class="tok-p">(</span><span class="tok-n">padded</span><span class="tok-p">,</span><span class="tok-n">flags</span><span class="tok-o">=</span><span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">DFT_COMPLEX_OUTPUT</span><span class="tok-p">)</span>
+<span class="tok-nb">complex</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">fft</span><span class="tok-o">.</span><span class="tok-n">fftshift</span><span class="tok-p">(</span><span class="tok-nb">complex</span><span class="tok-p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Carrega a imagem em tons de cinza, coloca um padding para chegar no tamanho otimo para a FFT. Soma 1 em toda a imagem para não ter log(0), e depois é aplicado logaritmo neperiano em toda a imagem.</p>
+</div>
+<div class="paragraph">
+<p>Após isso, é aplicada a DFT e um shift dos quadrantes da imagem resultante.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="imagens/espectro.png" alt="espectro">
+</div>
+<div class="title">Figure 14. Imagem do espectro de frequencia</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-k">def</span> <span class="tok-nf">aplicaFiltro</span><span class="tok-p">():</span>
+    <span class="tok-k">global</span> <span class="tok-n">gh</span><span class="tok-p">,</span> <span class="tok-n">gl</span><span class="tok-p">,</span> <span class="tok-n">c</span><span class="tok-p">,</span> <span class="tok-n">d0</span><span class="tok-p">,</span> <span class="tok-nb">complex</span>
+    <span class="tok-n">du</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">zeros</span><span class="tok-p">(</span><span class="tok-nb">complex</span><span class="tok-o">.</span><span class="tok-n">shape</span><span class="tok-p">,</span> <span class="tok-n">dtype</span><span class="tok-o">=</span><span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">float32</span><span class="tok-p">)</span>
+    <span class="tok-k">for</span> <span class="tok-n">u</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-n">dft_M</span><span class="tok-p">):</span>
+        <span class="tok-k">for</span> <span class="tok-n">v</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-n">dft_N</span><span class="tok-p">):</span>
+            <span class="tok-n">du</span><span class="tok-p">[</span><span class="tok-n">u</span><span class="tok-p">,</span><span class="tok-n">v</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-n">sqrt</span><span class="tok-p">((</span><span class="tok-n">u</span><span class="tok-o">-</span><span class="tok-n">dft_M</span><span class="tok-o">/</span><span class="tok-mf">2.0</span><span class="tok-p">)</span><span class="tok-o">*</span><span class="tok-p">(</span><span class="tok-n">u</span><span class="tok-o">-</span><span class="tok-n">dft_M</span><span class="tok-o">/</span><span class="tok-mf">2.0</span><span class="tok-p">)</span><span class="tok-o">+</span><span class="tok-p">(</span><span class="tok-n">v</span><span class="tok-o">-</span><span class="tok-n">dft_N</span><span class="tok-o">/</span><span class="tok-mf">2.0</span><span class="tok-p">)</span><span class="tok-o">*</span><span class="tok-p">(</span><span class="tok-n">v</span><span class="tok-o">-</span><span class="tok-n">dft_N</span><span class="tok-o">/</span><span class="tok-mf">2.0</span><span class="tok-p">))</span>
+
+    <span class="tok-n">du2</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">multiply</span><span class="tok-p">(</span><span class="tok-n">du</span><span class="tok-p">,</span><span class="tok-n">du</span><span class="tok-p">)</span> <span class="tok-o">/</span> <span class="tok-p">(</span><span class="tok-n">d0</span><span class="tok-o">*</span><span class="tok-n">d0</span><span class="tok-p">)</span>
+    <span class="tok-n">re</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">exp</span><span class="tok-p">(</span><span class="tok-o">-</span> <span class="tok-n">c</span> <span class="tok-o">*</span> <span class="tok-n">du2</span><span class="tok-p">)</span>
+    <span class="tok-n">H</span> <span class="tok-o">=</span> <span class="tok-p">(</span><span class="tok-n">gh</span> <span class="tok-o">-</span> <span class="tok-n">gl</span><span class="tok-p">)</span> <span class="tok-o">*</span> <span class="tok-p">(</span><span class="tok-mi">1</span> <span class="tok-o">-</span> <span class="tok-n">re</span><span class="tok-p">)</span> <span class="tok-o">+</span> <span class="tok-n">gl</span>
+    <span class="tok-c1">#cv2.normalize(H, H, 0, 1, cv2.NORM_MINMAX)</span>
+    <span class="tok-c1">#cv2.imshow(&quot;mask&quot;, H[:,:,0])</span>
+
+    <span class="tok-n">filtered</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">mulSpectrums</span><span class="tok-p">(</span><span class="tok-nb">complex</span><span class="tok-p">,</span><span class="tok-n">H</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+    <span class="tok-c1">#filtered = complex*H</span>
+
+    <span class="tok-n">filtered</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">fft</span><span class="tok-o">.</span><span class="tok-n">ifftshift</span><span class="tok-p">(</span><span class="tok-n">filtered</span><span class="tok-p">)</span>
+    <span class="tok-n">filtered</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">idft</span><span class="tok-p">(</span><span class="tok-n">filtered</span><span class="tok-p">)</span>
+    <span class="tok-n">filtered</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">magnitude</span><span class="tok-p">(</span><span class="tok-n">filtered</span><span class="tok-p">[:,:,</span><span class="tok-mi">0</span><span class="tok-p">],</span> <span class="tok-n">filtered</span><span class="tok-p">[:,:,</span><span class="tok-mi">1</span><span class="tok-p">])</span>
+    <span class="tok-c1">#filtered, _ = cv2.split(filtered)</span>
+
+    <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">normalize</span><span class="tok-p">(</span><span class="tok-n">filtered</span><span class="tok-p">,</span><span class="tok-n">filtered</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-mi">1</span><span class="tok-p">,</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">NORM_MINMAX</span><span class="tok-p">)</span>
+    <span class="tok-n">filtered</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">exp</span><span class="tok-p">(</span><span class="tok-n">filtered</span><span class="tok-p">)</span>
+    <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">normalize</span><span class="tok-p">(</span><span class="tok-n">filtered</span><span class="tok-p">,</span> <span class="tok-n">filtered</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-mi">1</span><span class="tok-p">,</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">NORM_MINMAX</span><span class="tok-p">)</span>
+
+    <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s2">&quot;homomorfico&quot;</span><span class="tok-p">,</span> <span class="tok-n">filtered</span><span class="tok-p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>É criada uma mascara, utilizando a função:</p>
+</div>
+<div class="paragraph">
+<p>\$H(u,v) = (gamma_h - gamma_l)*exp(-c(Du^2(u,v))/(Do^2)) + gamma_l\$</p>
+</div>
+<div class="paragraph">
+<p>usada como filtro do espectro frequencial.</p>
+</div>
+<div class="paragraph">
+<p>Depois, é feita a troca de quadrantes novamente e aplicada a transformada inversa. É retornada a magnitude dessa matriz, aplicada uma exponencial, e normalizada para poder imprimir a imagem.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="imagens/escura.jpg" alt="escura">
+</div>
+<div class="title">Figure 15. Imagem original</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="imagens/filtered.png" alt="filtered">
+</div>
+<div class="title">Figure 16. Imagem filtrada</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-09-13 16:10:42 Hora PadrÒo de Buenos Aires
+Last updated 2017-10-16 12:23:38 Hora PadrÒo de Buenos Aires
 </div>
 </div>
 <script type="text/x-mathjax-config">
