@@ -341,3 +341,41 @@ image::escura.jpg[]
 
 .Imagem filtrada
 image::filtered.png[]
+
+== Exercicio 10.1
+
+=== cannypontos.py
+
+[source,python]
+----
+include::programas/cannypontos.py[]
+----
+
+==== Explicando o codigo
+
+[source,python]
+----
+include::programas/cannypontos.py[lines=22..25]
+----
+
+É criada uma copia da imagem original que é borrada, para ser usada como fundo da imagem de pontilhismo.
+
+[source,python]
+----
+include::programas/cannypontos.py[lines=27..28]
+----
+
+Criados os valores de treshold, e embaralhados.
+
+[source,python]
+----
+include::programas/cannypontos.py[lines=30..44]
+----
+
+É aplicado um procedimento parecido ao do exemplo no site de tutoriais, com a diferença de que o procedimento é repetido para cada valor de treshold, para o qual é criada a imagem de bordas de Canny, dilatada com um kernel [3x3] e se o valor do pixel for 255 (indicando que tem uma borda nesse ponto) é criado o ponto utilizando o valor de cor da imagem original.
+
+.Imagem original
+image::nina.jpg[]
+
+.Imagem pontilhada
+image::cannypoints.jpg[]

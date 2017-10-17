@@ -539,6 +539,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_homomorfico_py">homomorfico.py</a></li>
 </ul>
 </li>
+<li><a href="#_exercicio_10_1">Exercicio 10.1</a>
+<ul class="sectlevel2">
+<li><a href="#_cannypontos_py">cannypontos.py</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -1734,10 +1739,128 @@ Foi utilizado um offset de 20 na variavel <strong>numero</strong> apenas pra mel
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_exercicio_10_1">Exercicio 10.1</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_cannypontos_py">cannypontos.py</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-kn">import</span> <span class="tok-nn">cv2</span>
+<span class="tok-kn">import</span> <span class="tok-nn">numpy</span> <span class="tok-kn">as</span> <span class="tok-nn">np</span>
+<span class="tok-kn">from</span> <span class="tok-nn">random</span> <span class="tok-kn">import</span> <span class="tok-o">*</span>
+<span class="tok-kn">from</span> <span class="tok-nn">copy</span> <span class="tok-kn">import</span> <span class="tok-n">copy</span>
+
+<span class="tok-n">step</span> <span class="tok-o">=</span> <span class="tok-mi">5</span>
+<span class="tok-n">jitter</span> <span class="tok-o">=</span> <span class="tok-mi">3</span>
+<span class="tok-n">raio</span> <span class="tok-o">=</span> <span class="tok-mi">2</span>
+<span class="tok-n">kernel</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">ones</span><span class="tok-p">([</span><span class="tok-mi">3</span><span class="tok-p">,</span><span class="tok-mi">3</span><span class="tok-p">],</span><span class="tok-n">dtype</span><span class="tok-o">=</span><span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">uint8</span><span class="tok-p">)</span>
+
+<span class="tok-n">image_or</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imread</span><span class="tok-p">(</span><span class="tok-s2">&quot;nina.jpg&quot;</span><span class="tok-p">)</span>
+<span class="tok-n">image</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">cvtColor</span><span class="tok-p">(</span><span class="tok-n">image_or</span><span class="tok-p">,</span><span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">COLOR_BGR2GRAY</span><span class="tok-p">)</span>
+
+<span class="tok-n">height</span><span class="tok-p">,</span> <span class="tok-n">width</span><span class="tok-p">,</span> <span class="tok-n">depth</span> <span class="tok-o">=</span> <span class="tok-n">image_or</span><span class="tok-o">.</span><span class="tok-n">shape</span>
+<span class="tok-nb">xrange</span><span class="tok-p">,</span> <span class="tok-n">yrange</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">arange</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-n">height</span> <span class="tok-o">/</span> <span class="tok-n">step</span><span class="tok-p">)),</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">arange</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">,</span> <span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-n">width</span> <span class="tok-o">/</span> <span class="tok-n">step</span><span class="tok-p">))</span>
+
+<span class="tok-k">for</span> <span class="tok-n">i</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-nb">len</span><span class="tok-p">(</span><span class="tok-nb">xrange</span><span class="tok-p">)):</span>
+    <span class="tok-nb">xrange</span><span class="tok-p">[</span><span class="tok-n">i</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-nb">xrange</span><span class="tok-p">[</span><span class="tok-n">i</span><span class="tok-p">]</span> <span class="tok-o">*</span> <span class="tok-n">step</span> <span class="tok-o">+</span> <span class="tok-n">step</span> <span class="tok-o">/</span> <span class="tok-mi">2</span><span class="tok-p">)</span>
+<span class="tok-k">for</span> <span class="tok-n">j</span> <span class="tok-ow">in</span> <span class="tok-nb">range</span><span class="tok-p">(</span><span class="tok-nb">len</span><span class="tok-p">(</span><span class="tok-n">yrange</span><span class="tok-p">)):</span>
+    <span class="tok-n">yrange</span><span class="tok-p">[</span><span class="tok-n">j</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-n">yrange</span><span class="tok-p">[</span><span class="tok-n">j</span><span class="tok-p">]</span> <span class="tok-o">*</span> <span class="tok-n">step</span> <span class="tok-o">+</span> <span class="tok-n">step</span> <span class="tok-o">/</span> <span class="tok-mi">2</span><span class="tok-p">)</span>
+
+<span class="tok-n">points</span> <span class="tok-o">=</span> <span class="tok-n">copy</span><span class="tok-p">(</span><span class="tok-n">image_or</span><span class="tok-p">)</span>
+<span class="tok-n">points</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">blur</span><span class="tok-p">(</span><span class="tok-n">points</span><span class="tok-p">,(</span><span class="tok-mi">5</span><span class="tok-p">,</span><span class="tok-mi">5</span><span class="tok-p">))</span>
+<span class="tok-n">points</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">blur</span><span class="tok-p">(</span><span class="tok-n">points</span><span class="tok-p">,(</span><span class="tok-mi">5</span><span class="tok-p">,</span><span class="tok-mi">5</span><span class="tok-p">))</span>
+<span class="tok-n">points</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">blur</span><span class="tok-p">(</span><span class="tok-n">points</span><span class="tok-p">,(</span><span class="tok-mi">5</span><span class="tok-p">,</span><span class="tok-mi">5</span><span class="tok-p">))</span>
+
+<span class="tok-n">vector</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">arange</span><span class="tok-p">(</span><span class="tok-mi">10</span><span class="tok-p">,</span><span class="tok-mi">200</span><span class="tok-p">,</span><span class="tok-mi">10</span><span class="tok-p">)</span>
+<span class="tok-n">shuffle</span><span class="tok-p">(</span><span class="tok-n">vector</span><span class="tok-p">)</span>
+
+<span class="tok-k">for</span> <span class="tok-n">i</span> <span class="tok-ow">in</span> <span class="tok-n">vector</span><span class="tok-p">:</span>
+    <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">random</span><span class="tok-o">.</span><span class="tok-n">shuffle</span><span class="tok-p">(</span><span class="tok-nb">xrange</span><span class="tok-p">)</span>
+
+    <span class="tok-n">canny</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">Canny</span><span class="tok-p">(</span><span class="tok-n">image</span><span class="tok-p">,</span><span class="tok-n">i</span><span class="tok-p">,</span><span class="tok-mi">3</span><span class="tok-o">*</span><span class="tok-n">i</span><span class="tok-p">)</span>
+    <span class="tok-n">canny</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">dilate</span><span class="tok-p">(</span><span class="tok-n">canny</span><span class="tok-p">,</span><span class="tok-n">kernel</span><span class="tok-p">,</span><span class="tok-n">iterations</span><span class="tok-o">=</span><span class="tok-mi">1</span><span class="tok-p">)</span>
+
+    <span class="tok-k">for</span> <span class="tok-n">j</span> <span class="tok-ow">in</span> <span class="tok-nb">xrange</span><span class="tok-p">:</span>
+        <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">random</span><span class="tok-o">.</span><span class="tok-n">shuffle</span><span class="tok-p">(</span><span class="tok-n">yrange</span><span class="tok-p">)</span>
+        <span class="tok-k">for</span> <span class="tok-n">k</span> <span class="tok-ow">in</span> <span class="tok-n">yrange</span><span class="tok-p">:</span>
+            <span class="tok-k">if</span> <span class="tok-n">canny</span><span class="tok-p">[</span><span class="tok-n">j</span><span class="tok-p">,</span><span class="tok-n">k</span><span class="tok-p">]</span> <span class="tok-o">==</span> <span class="tok-mi">255</span><span class="tok-p">:</span>
+                <span class="tok-n">x</span> <span class="tok-o">=</span> <span class="tok-n">j</span> <span class="tok-o">+</span> <span class="tok-n">randrange</span><span class="tok-p">(</span><span class="tok-o">-</span><span class="tok-n">jitter</span><span class="tok-p">,</span> <span class="tok-n">jitter</span><span class="tok-p">)</span>
+                <span class="tok-n">y</span> <span class="tok-o">=</span> <span class="tok-n">k</span> <span class="tok-o">+</span> <span class="tok-n">randrange</span><span class="tok-p">(</span><span class="tok-o">-</span><span class="tok-n">jitter</span><span class="tok-p">,</span> <span class="tok-n">jitter</span><span class="tok-p">)</span>
+                <span class="tok-n">pixel</span> <span class="tok-o">=</span> <span class="tok-n">image_or</span><span class="tok-p">[</span><span class="tok-n">j</span><span class="tok-p">,</span> <span class="tok-n">k</span><span class="tok-p">]</span><span class="tok-o">.</span><span class="tok-n">tolist</span><span class="tok-p">()</span>
+                <span class="tok-n">bola</span> <span class="tok-o">=</span> <span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-n">raio</span> <span class="tok-o">+</span> <span class="tok-p">(</span><span class="tok-n">i</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">190</span><span class="tok-o">*</span><span class="tok-n">randrange</span><span class="tok-p">(</span><span class="tok-mi">2</span><span class="tok-p">,</span><span class="tok-mi">5</span><span class="tok-p">))</span>
+                <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">circle</span><span class="tok-p">(</span><span class="tok-n">points</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">y</span><span class="tok-p">,</span> <span class="tok-n">x</span><span class="tok-p">),</span> <span class="tok-n">bola</span><span class="tok-p">,</span> <span class="tok-n">pixel</span><span class="tok-p">,</span> <span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">,</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">LINE_AA</span><span class="tok-p">)</span>
+
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imshow</span><span class="tok-p">(</span><span class="tok-s2">&quot;pontilhado&quot;</span><span class="tok-p">,</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">hstack</span><span class="tok-p">((</span><span class="tok-n">image_or</span><span class="tok-p">,</span><span class="tok-n">points</span><span class="tok-p">)))</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">imwrite</span><span class="tok-p">(</span><span class="tok-s2">&quot;cannypoints.jpg&quot;</span><span class="tok-p">,</span> <span class="tok-n">points</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">waitKey</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">)</span>
+<span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">destroyAllWindows</span><span class="tok-p">()</span></code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_explicando_o_codigo_8">Explicando o codigo</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">points</span> <span class="tok-o">=</span> <span class="tok-n">copy</span><span class="tok-p">(</span><span class="tok-n">image_or</span><span class="tok-p">)</span>
+<span class="tok-n">points</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">blur</span><span class="tok-p">(</span><span class="tok-n">points</span><span class="tok-p">,(</span><span class="tok-mi">5</span><span class="tok-p">,</span><span class="tok-mi">5</span><span class="tok-p">))</span>
+<span class="tok-n">points</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">blur</span><span class="tok-p">(</span><span class="tok-n">points</span><span class="tok-p">,(</span><span class="tok-mi">5</span><span class="tok-p">,</span><span class="tok-mi">5</span><span class="tok-p">))</span>
+<span class="tok-n">points</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">blur</span><span class="tok-p">(</span><span class="tok-n">points</span><span class="tok-p">,(</span><span class="tok-mi">5</span><span class="tok-p">,</span><span class="tok-mi">5</span><span class="tok-p">))</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>É criada uma copia da imagem original que é borrada, para ser usada como fundo da imagem de pontilhismo.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">vector</span> <span class="tok-o">=</span> <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">arange</span><span class="tok-p">(</span><span class="tok-mi">10</span><span class="tok-p">,</span><span class="tok-mi">200</span><span class="tok-p">,</span><span class="tok-mi">10</span><span class="tok-p">)</span>
+<span class="tok-n">shuffle</span><span class="tok-p">(</span><span class="tok-n">vector</span><span class="tok-p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Criados os valores de treshold, e embaralhados.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-k">for</span> <span class="tok-n">i</span> <span class="tok-ow">in</span> <span class="tok-n">vector</span><span class="tok-p">:</span>
+    <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">random</span><span class="tok-o">.</span><span class="tok-n">shuffle</span><span class="tok-p">(</span><span class="tok-nb">xrange</span><span class="tok-p">)</span>
+
+    <span class="tok-n">canny</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">Canny</span><span class="tok-p">(</span><span class="tok-n">image</span><span class="tok-p">,</span><span class="tok-n">i</span><span class="tok-p">,</span><span class="tok-mi">3</span><span class="tok-o">*</span><span class="tok-n">i</span><span class="tok-p">)</span>
+    <span class="tok-n">canny</span> <span class="tok-o">=</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">dilate</span><span class="tok-p">(</span><span class="tok-n">canny</span><span class="tok-p">,</span><span class="tok-n">kernel</span><span class="tok-p">,</span><span class="tok-n">iterations</span><span class="tok-o">=</span><span class="tok-mi">1</span><span class="tok-p">)</span>
+
+    <span class="tok-k">for</span> <span class="tok-n">j</span> <span class="tok-ow">in</span> <span class="tok-nb">xrange</span><span class="tok-p">:</span>
+        <span class="tok-n">np</span><span class="tok-o">.</span><span class="tok-n">random</span><span class="tok-o">.</span><span class="tok-n">shuffle</span><span class="tok-p">(</span><span class="tok-n">yrange</span><span class="tok-p">)</span>
+        <span class="tok-k">for</span> <span class="tok-n">k</span> <span class="tok-ow">in</span> <span class="tok-n">yrange</span><span class="tok-p">:</span>
+            <span class="tok-k">if</span> <span class="tok-n">canny</span><span class="tok-p">[</span><span class="tok-n">j</span><span class="tok-p">,</span><span class="tok-n">k</span><span class="tok-p">]</span> <span class="tok-o">==</span> <span class="tok-mi">255</span><span class="tok-p">:</span>
+                <span class="tok-n">x</span> <span class="tok-o">=</span> <span class="tok-n">j</span> <span class="tok-o">+</span> <span class="tok-n">randrange</span><span class="tok-p">(</span><span class="tok-o">-</span><span class="tok-n">jitter</span><span class="tok-p">,</span> <span class="tok-n">jitter</span><span class="tok-p">)</span>
+                <span class="tok-n">y</span> <span class="tok-o">=</span> <span class="tok-n">k</span> <span class="tok-o">+</span> <span class="tok-n">randrange</span><span class="tok-p">(</span><span class="tok-o">-</span><span class="tok-n">jitter</span><span class="tok-p">,</span> <span class="tok-n">jitter</span><span class="tok-p">)</span>
+                <span class="tok-n">pixel</span> <span class="tok-o">=</span> <span class="tok-n">image_or</span><span class="tok-p">[</span><span class="tok-n">j</span><span class="tok-p">,</span> <span class="tok-n">k</span><span class="tok-p">]</span><span class="tok-o">.</span><span class="tok-n">tolist</span><span class="tok-p">()</span>
+                <span class="tok-n">bola</span> <span class="tok-o">=</span> <span class="tok-nb">int</span><span class="tok-p">(</span><span class="tok-n">raio</span> <span class="tok-o">+</span> <span class="tok-p">(</span><span class="tok-n">i</span><span class="tok-p">)</span><span class="tok-o">/</span><span class="tok-mi">190</span><span class="tok-o">*</span><span class="tok-n">randrange</span><span class="tok-p">(</span><span class="tok-mi">2</span><span class="tok-p">,</span><span class="tok-mi">5</span><span class="tok-p">))</span>
+                <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">circle</span><span class="tok-p">(</span><span class="tok-n">points</span><span class="tok-p">,</span> <span class="tok-p">(</span><span class="tok-n">y</span><span class="tok-p">,</span> <span class="tok-n">x</span><span class="tok-p">),</span> <span class="tok-n">bola</span><span class="tok-p">,</span> <span class="tok-n">pixel</span><span class="tok-p">,</span> <span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-p">,</span> <span class="tok-n">cv2</span><span class="tok-o">.</span><span class="tok-n">LINE_AA</span><span class="tok-p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>É aplicado um procedimento parecido ao do exemplo no site de tutoriais, com a diferença de que o procedimento é repetido para cada valor de treshold, para o qual é criada a imagem de bordas de Canny, dilatada com um kernel [3x3] e se o valor do pixel for 255 (indicando que tem uma borda nesse ponto) é criado o ponto utilizando o valor de cor da imagem original.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="imagens/nina.jpg" alt="nina">
+</div>
+<div class="title">Figure 17. Imagem original</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="imagens/cannypoints.jpg" alt="cannypoints">
+</div>
+<div class="title">Figure 18. Imagem pontilhada</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-10-16 12:23:38 Hora PadrÒo de Buenos Aires
+Last updated 2017-10-17 15:34:55 Hora PadrÒo de Buenos Aires
 </div>
 </div>
 <script type="text/x-mathjax-config">
